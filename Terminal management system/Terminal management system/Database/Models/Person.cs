@@ -8,6 +8,10 @@ namespace Terminal_management_system.Database.Models
 {
     class Person
     {
+        public DateTime RegisterDate { get; set; }
+        public int Id { get; set; }
+
+        private static int IdCounter = 1;
         public static string Name { get; set; }
         public static string Lastname { get; set; }
         public static string Email { get; set; }
@@ -15,25 +19,16 @@ namespace Terminal_management_system.Database.Models
 
         public Person(string name, string lastname, string email, string password)
         {
+            RegisterDate = DateTime.Now;
+            Id = IdCounter++;
             Name = name;
             Lastname = lastname;
             Email = email;
             Password = password;
         }
-        public Person(string name, string lastname)
+        public string GetInfo()
         {
-            Name = name;
-            Lastname = lastname;
-        }
-
-        
-        public static string GetRegisterInfo()
-        {
-            return Name + " " + Lastname + " " + Email;
-        }
-        public static string GetLoginInfo()
-        {
-            return Name + " " + Lastname;
+            return Name + " " + Lastname + " " + Email + " " + RegisterDate;
         }
     }
 }

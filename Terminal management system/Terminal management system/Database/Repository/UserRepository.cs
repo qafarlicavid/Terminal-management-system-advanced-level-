@@ -9,22 +9,52 @@ namespace Terminal_management_system.Database.Repository
 {
     class UserRepository
     {
-        private static List<Person> Persons { get; set; } = new List<Person>()
-        {
-            new Person("super", "admin", " admin@gmail.com ", "123321")
-        };
+        public static List<Person> Persons { get; set; } = new List<Person>();
 
-        public static Person Register(string name, string lastname, string email, string password)
+
+        public static void Add(string name, string lastName, string email, string password)
         {
-            Person person = new Person(name, lastname, email, password);
-            Persons.Add(person);
-            return person;
+
+            Person user = new Person(name, lastName, email, password);
+            Persons.Add(user);
         }
-        public static Person Login(string email, string password)
+
+        public static bool IsEqualComfirmPassword(string password, string comfirmPassword)
         {
-            Person person = new Person(email, password);
-            Persons.Add(person);
-            return person;
+            if (comfirmPassword == password)
+            {
+                return true;
+            }
+
+            Console.WriteLine("Passwords is not same! ");
+
+            return false;
+        }
+        public static bool IsUserExistsByEmail(string email, string comfirmPassword)
+        {
+            foreach (Person user in Persons)
+            {
+
+                if (Person.Email == email && Person.Password == comfirmPassword)
+                {
+                    foreach (Person user1 in Persons)
+                    {
+                        if (user1.Id == user.Id)
+                        {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            }
+            return false;
+        }
+        public static void ShowAllUsers()
+        {
+            foreach (Person user in Persons)
+            {
+                Console.WriteLine(user.GetInfo());
+            }
         }
     }
 }
