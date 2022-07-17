@@ -7,8 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="ApplicationLogic\Validations\" />
-    <Folder Include="Database\Models\" />
     <Folder Include="Database\Repository\" />
   </ItemGroup>
 
