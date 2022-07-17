@@ -8,10 +8,10 @@ namespace Terminal_management_system.Database.Models
 {
     class Person
     {
-        public string Name { get; set; }
-        public string Lastname { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
+        public static string Name { get; set; }
+        public static string Lastname { get; set; }
+        public static string Email { get; set; }
+        public static string Password { get; set; }
 
         public Person(string name, string lastname, string email, string password)
         {
@@ -26,9 +26,14 @@ namespace Terminal_management_system.Database.Models
             Lastname = lastname;
         }
 
-        public string GetInfo()
+        
+        public static string GetRegisterInfo()
         {
-            return Name + Lastname;
+            return Name + " " + Lastname + " " + Email;
+        }
+        public static string GetLoginInfo()
+        {
+            return Name + " " + Lastname;
         }
     }
 }

@@ -51,7 +51,7 @@ namespace Terminal_management_system.ApplicationLogic.Validations
                 return true;
             }
 
-            Console.WriteLine("Email should contain @ character");
+            Console.WriteLine("The email you entered is incorrect, it should contains @ character, and some conditions...");
 
             return false;
         }
