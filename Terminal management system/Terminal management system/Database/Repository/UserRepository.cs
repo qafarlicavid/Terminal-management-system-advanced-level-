@@ -19,14 +19,14 @@ namespace Terminal_management_system.Database.Repository
             Persons.Add(user);
         }
 
-        public static bool IsEqualComfirmPassword(string password, string comfirmPassword)
+        public static bool IsEqualConfirmPassword(string password, string comfirmPassword)
         {
             if (comfirmPassword == password)
             {
                 return true;
             }
 
-            Console.WriteLine("Passwords is not same! ");
+            Console.WriteLine("Passwords isn't same! ");
 
             return false;
         }

@@ -14,15 +14,15 @@ namespace Terminal_management_system.ApplicationLogic
         {
 
 
-            Console.Write("Write name: ");
+            Console.Write("What is your name?: ");
             string name = Console.ReadLine();
-            Console.Write("Write surname: ");
+            Console.Write("What is your surname? ");
             string lastName = Console.ReadLine();
-            Console.Write("Write email: ");
+            Console.Write("Okay, please write your email : ");
             string email = Console.ReadLine();
-            Console.Write("Write password: ");
+            Console.Write("Then, please write your password : ");
             string password = Console.ReadLine();
-            Console.Write("Please comfirm password: ");
+            Console.Write("Please confirm your password: ");
             string comfirmPassword = Console.ReadLine();
             Console.WriteLine();
 
@@ -36,7 +36,7 @@ namespace Terminal_management_system.ApplicationLogic
                 validationLastName.IsValid(lastName) &
                 validationEmail.IsEmailValid(email) &
                 validationPassword.IsPasswordValid(password) &
-                UserRepository.IsEqualComfirmPassword(password, comfirmPassword))
+                UserRepository.IsEqualConfirmPassword(password, comfirmPassword))
             {
                 UserRepository.Add(name, lastName, email, password);
 
@@ -52,15 +52,15 @@ namespace Terminal_management_system.ApplicationLogic
 
         public static void Login()
         {
-            Console.Write("Please input your email: ");
+            Console.Write("Input your email: ");
             string email = Console.ReadLine();
-            Console.Write("Please input your password: ");
+            Console.Write("Input your password: ");
             string password = Console.ReadLine();
             Console.WriteLine();
 
             if (UserRepository.IsUserExistsByEmail(email, password))
             {
-                Console.WriteLine("Well come to our application! ");
+                Console.WriteLine("Wellcome to our application! ");
             }
             else if (email == "Admin@gmail.com" && password == "123321")
             {
@@ -79,7 +79,7 @@ namespace Terminal_management_system.ApplicationLogic
             }
             else
             {
-                Console.WriteLine("Email or password is not correct! ");
+                Console.WriteLine("Hey, email or password is not correct! ");
             }
 
             Console.WriteLine();

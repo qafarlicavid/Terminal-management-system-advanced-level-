@@ -13,7 +13,8 @@ namespace Terminal_management_system.UI
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Commands:");
+            Console.WriteLine("----------------------------------------------------- Welcome --------------------------------------------------------- ");
+            Console.WriteLine("Current Commands:");
 
             UserRepository.Add("Super", "Admin", "admin@gmail.com", "123321");
 
