@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>Terminal_management_system</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="ApplicationLogic\Validations\" />
+    <Folder Include="Database\Models\" />
+    <Folder Include="Database\Repository\" />
+  </ItemGroup>
+
+</Project>
