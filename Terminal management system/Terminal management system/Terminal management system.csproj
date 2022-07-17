@@ -6,8 +6,4 @@
     <RootNamespace>Terminal_management_system</RootNamespace>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Database\Repository\" />
-  </ItemGroup>
-
 </Project>

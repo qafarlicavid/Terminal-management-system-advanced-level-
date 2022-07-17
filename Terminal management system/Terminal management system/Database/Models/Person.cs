@@ -20,6 +20,12 @@ namespace Terminal_management_system.Database.Models
             Email = email;
             Password = password;
         }
+        public Person(string name, string lastname)
+        {
+            Name = name;
+            Lastname = lastname;
+        }
+
         public string GetInfo()
         {
             return Name + Lastname;
