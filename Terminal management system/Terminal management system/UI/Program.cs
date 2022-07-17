@@ -25,7 +25,18 @@ namespace Terminal_management_system.UI
                 string command = Console.ReadLine();
                 Console.WriteLine();
 
-                
+                if (command == "/register")
+                {
+                    Authentication.Register();
+                }
+                else if (command == "/login")
+                {
+                    Authentication.Login();
+                }
+                else
+                {
+                    Console.WriteLine("Command doesn't exist! ");
+                }
             }
 
 
