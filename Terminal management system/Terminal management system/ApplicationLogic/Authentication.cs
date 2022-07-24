@@ -4,85 +4,92 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terminal_management_system.ApplicationLogic.Validations;
+using Terminal_management_system.Database.Models;
 using Terminal_management_system.Database.Repository;
 
 namespace Terminal_management_system.ApplicationLogic
 {
     class Authentication
     {
-        public static void Register()
+        public static Person Register()
         {
-
-
-            Console.Write("What is your name?: ");
-            string name = Console.ReadLine();
-            Console.Write("What is your surname? ");
-            string lastName = Console.ReadLine();
-            Console.Write("Okay, please write your email : ");
-            string email = Console.ReadLine();
-            Console.Write("Then, please write your password : ");
-            string password = Console.ReadLine();
-            Console.Write("Please confirm your password: ");
-            string comfirmPassword = Console.ReadLine();
             Console.WriteLine();
+            Console.WriteLine("write name :");
+            string name = Console.ReadLine();
 
-
-            NameValidation validationName = new NameValidation();
-            LastnameValidation validationLastName = new LastnameValidation();
-            EmailValidation validationEmail = new EmailValidation();
-            PasswordValidation validationPassword = new PasswordValidation();
-
-            if (validationName.IsValid(name) &
-                validationLastName.IsValid(lastName) &
-                validationEmail.IsEmailValid(email) &
-                validationPassword.IsPasswordValid(password) &
-                UserRepository.IsEqualConfirmPassword(password, comfirmPassword))
+            while (!UserValidations.IsNameValid(name))
             {
-                UserRepository.Add(name, lastName, email, password);
+                Console.WriteLine("write name again");
+                name = Console.ReadLine();
+            }
 
-                Console.WriteLine($"{name}, you successfully registered, now you can login with your new account!");
-                Console.WriteLine();
-            }
-            else
+            Console.WriteLine("write surname :");
+            string surname = Console.ReadLine();
+
+            while (!UserValidations.IsSurnameValid(surname))
             {
-                Console.WriteLine("You couldn't register!");
-                Console.WriteLine();
+                Console.WriteLine("write surname again");
+                surname = Console.ReadLine();
             }
+
+            Console.WriteLine("write email :");
+            string email = Console.ReadLine();
+
+            while (!UserValidations.IsEmailValid(email) & UserValidations.isEmailUnical(email))
+            {
+                Console.WriteLine("write email again");
+                email = Console.ReadLine();
+            }
+
+            Console.WriteLine("write password :");
+            string password = Console.ReadLine();
+
+            Console.WriteLine("Confirm Password : ");
+            string confirmPassword = Console.ReadLine();
+
+
+            while (!(UserValidations.IsPasswordValid(password) && UserValidations.IsPaswordsMatch(password, confirmPassword)))
+            {
+                Console.WriteLine("write password again");
+                password = Console.ReadLine();
+
+                Console.WriteLine("write confirm password again");
+                confirmPassword = Console.ReadLine();
+            }
+
+            UserRepository.Add(name, surname, email, password);
+            Console.WriteLine("You succesfully registered you can login now with your account");
+
+            Person user = UserRepository.GetUserByEmail(email);
+
+            return user;
+
         }
 
         public static void Login()
         {
-            Console.Write("Input your email: ");
+            Console.WriteLine("Please enter email");
             string email = Console.ReadLine();
-            Console.Write("Input your password: ");
+
+            Console.WriteLine("Please enter password");
             string password = Console.ReadLine();
-            Console.WriteLine();
 
-            if (UserRepository.IsUserExistsByEmail(email, password))
+            if (UserValidations.IsLogin(email, password))
             {
-                Console.WriteLine("Wellcome to our application! ");
-            }
-            else if (email == "Admin@gmail.com" && password == "123321")
-            {
-                Console.WriteLine("Welcome Admin!");
-                Console.WriteLine("/show-users");
-                string command = Console.ReadLine();
+                Person user = UserRepository.GetUserByEmail(email);
 
-                if (command == "/show-users")
+
+                if (user is Admin)
                 {
-                    UserRepository.ShowAllUsers();
+                    Dashboard dashBoard = new Dashboard(user);
+                    Dashboard.AdminPanel(email);
                 }
                 else
                 {
-                    Console.WriteLine("not found");
+                    Dashboard.UserPanel(email);
                 }
-            }
-            else
-            {
-                Console.WriteLine("Hey, email or password is not correct! ");
-            }
 
-            Console.WriteLine();
+            }
         }
     }
 }

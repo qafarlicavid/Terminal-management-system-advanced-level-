@@ -11,12 +11,11 @@ namespace Terminal_management_system.UI
 
     class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             Console.WriteLine("----------------------------------------------------- Welcome --------------------------------------------------------- ");
             Console.WriteLine("Current Commands:");
-
-            UserRepository.Add("Super", "Admin", "admin@gmail.com", "123321");
+            Console.WriteLine("----------------------------------------------------------------------------------------------------------------------- ");
 
             while (true)
             {
@@ -39,8 +38,6 @@ namespace Terminal_management_system.UI
                     Console.WriteLine("Command doesn't exist! ");
                 }
             }
-
-
         }
     }
 }
