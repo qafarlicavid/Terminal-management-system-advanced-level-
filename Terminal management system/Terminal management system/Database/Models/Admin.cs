@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Terminal_management_system.Database.Models
 {
-    class Admin : Person
+    public class Admin : Person
     {
         public Admin(string name, string lastname, string email, string password, int id)
             : base(name, lastname, email, password, id)
@@ -22,7 +22,7 @@ namespace Terminal_management_system.Database.Models
 
         public override string GetInfo()
         {
-            return Id + " " + Name + " " + Lastname + " " + Email;
+            return Id + " " + FirstName + " " + LastName + " " + Email;
         }
     }
 }

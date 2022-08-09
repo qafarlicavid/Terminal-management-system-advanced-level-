@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 using Terminal_management_system.ApplicationLogic.Validations;
 using Terminal_management_system.Database.Models;
 using Terminal_management_system.Database.Repository;
+using Terminal_management_system.Database.Repository.Common;
 using Terminal_management_system.UI;
 
 namespace Terminal_management_system.ApplicationLogic
 {
-    class Dashboard
+    public partial class Dashboard : Repository<Person, int>
     {
         public static Person CurrentUser { get; set; }
 
@@ -22,8 +23,8 @@ namespace Terminal_management_system.ApplicationLogic
 
         public static void AdminPanel(string email)
         {
-
-            Person user = UserRepository.GetUserByEmail(email);
+            UserRepository userRepository = new UserRepository();
+            Person user = userRepository.GetUserByEmail(email);
             Console.WriteLine("Admin succesfully joined", user.GetInfo());
 
             while (true)
@@ -38,7 +39,6 @@ namespace Terminal_management_system.ApplicationLogic
                 Console.WriteLine("/remove-user");
                 Console.WriteLine("/add-user");
                 Console.WriteLine("/update-user");
-                Console.WriteLine("/reports");
                 Console.WriteLine();
                 Console.WriteLine("Admin User's Commands :");
                 Console.WriteLine();
@@ -48,16 +48,22 @@ namespace Terminal_management_system.ApplicationLogic
                 Console.WriteLine("/add-admin");
                 Console.WriteLine("/logout");
 
+                Console.WriteLine($"COMMANDS :  /update-info  /add-user  /show-users  /update-user  /remove-user" +
+                    $"   /add-admin  /show-admins  /remove-admin  " +
+                    $"   /reports   /all-reports" +
+                    $"   /status-blogs  /delete-blog  /delete-all-blogs  /logout");
+
+
                 Console.WriteLine("Please enter command");
                 string command = Console.ReadLine();
 
                 if (command == "/show-users")
                 {
-                    List<Person> Users = UserRepository.GetAll();
+                    List<Person> Users = userRepository.GetAll();
 
                     foreach (Person oneuser in Users)
                     {
-                        Console.WriteLine(oneuser.Id + " " + Person.Name + " " + Person.Lastname + " " + Person.Email);
+                        Console.WriteLine(oneuser.Id + " " + oneuser.FirstName + " " + oneuser.LastName + " " + oneuser.Email);
                     }
                 }
                 else if (command == "/remove-user")
@@ -65,10 +71,10 @@ namespace Terminal_management_system.ApplicationLogic
                     Console.WriteLine("Please Enter email");
                     string targetemail = Console.ReadLine();
 
-                    Person RemoveUser = UserRepository.GetUserByEmail(targetemail);
-                    if (RemoveUser != null && Person.Email != Person.Email)
+                    Person RemoveUser = userRepository.GetUserByEmail(targetemail);
+                    if (RemoveUser != null && RemoveUser.Email != RemoveUser.Email)
                     {
-                        UserRepository.Delete(RemoveUser);
+                        userRepository.Delete(RemoveUser);
                         Console.WriteLine("User succesfully deleted");
 
                     }
@@ -88,11 +94,15 @@ namespace Terminal_management_system.ApplicationLogic
                 {
                     Console.WriteLine("Please enter user's email");
                     string updateEmail = Console.ReadLine();
-                    Person updateUser = UserRepository.GetUserByEmail(updateEmail);
-                    if (!UserValidations.IsAdmin(updateUser) && !(Person.Email == Person.Email))
+                    Person updateUser = userRepository.GetUserByEmail(updateEmail);
+                    if (!UserValidations.IsAdmin(updateUser) && !(updateUser.Email == updateUser.Email))
                     {
-                        Person newUser = UserRepository.Update(updateUser);
-                        Console.WriteLine($"{Person.Name} {Person.Lastname} succesfully updated to {Person.Name} {Person.Lastname}");
+                        string firstname = Console.ReadLine();
+                        string lastname = Console.ReadLine();
+                        string mail = Console.ReadLine();
+                        string password = Console.ReadLine();
+                        Person newUser = userRepository.UpdateInfo(firstname, lastname, mail, password);
+                        Console.WriteLine($"{updateUser.FirstName} {updateUser.LastName} succesfully updated to {newUser.FirstName} {newUser.LastName}");
 
                     }
                     else
@@ -100,33 +110,14 @@ namespace Terminal_management_system.ApplicationLogic
                         Console.WriteLine("Email not found ERROR");
                     }
                 }
-                else if (command == "/reports")
-                {
-                    List<Report> reports = ReportRepository.GetReports();
-                    foreach (Report report in reports)
-                    {
-                        string isadmin = "";
-                        if (report.ToUser is Admin)
-                        {
-                            isadmin = "Admin";
-                        }
-                        else
-                        {
-                            isadmin = "Not Admin";
-                        }
-
-                        Console.WriteLine($"{report.FromUser}  {report.ToUser}  {report.Text} {isadmin}");
-                    }
-                }
-
                 else if (command == "/add-admin")
                 {
                     Person adminUser = Authentication.Register();
-                    UserRepository.Delete(adminUser);
+                    userRepository.Delete(adminUser);
 
-                    Admin admin = new Admin(Person.Name, Person.Lastname, Person.Email, Person.Password, adminUser.Id);
-                    UserRepository.Add(admin);
-                    Console.WriteLine($"{Person.Name} {Person.Lastname} is the new Admin now");
+                    Admin admin = new Admin(adminUser.FirstName, adminUser.LastName, adminUser.Email, adminUser.Password, adminUser.Id);
+                    userRepository.Add(admin);
+                    Console.WriteLine($"{adminUser.FirstName} {adminUser.LastName} is the new Admin now");
                 }
 
                 else if (command == "/show-admins")
@@ -140,18 +131,18 @@ namespace Terminal_management_system.ApplicationLogic
                 {
                     Console.WriteLine("Please enter email");
                     string adminEmail = Console.ReadLine();
-                    Person user1 = UserRepository.GetUserByEmail(adminEmail);
+                    Person user1 = userRepository.GetUserByEmail(adminEmail);
 
-                    if (user1 is Admin && Person.Email != Person.Email)
+                    if (user1 is Admin && user1.Email != user1.Email)
                     {
                         Console.WriteLine("You can`t make admin to admin");
                     }
                     else
                     {
-                        UserRepository.Delete(user1);
-                        Admin admin = new Admin(Person.Name, Person.Lastname, Person.Email, Person.Password, user1.Id);
-                        UserRepository.Add(admin);
-                        Console.WriteLine($"{Person.Name} {Person.Lastname} is Admin now");
+                        userRepository.Delete(user1);
+                        Admin admin = new Admin(user1.FirstName, user1.LastName, user1.Email, user1.Password, user1.Id);
+                        userRepository.Add(admin);
+                        Console.WriteLine($"{user1.FirstName} {user1.LastName} is Admin now");
 
                     }
                 }
@@ -160,11 +151,11 @@ namespace Terminal_management_system.ApplicationLogic
                     Console.WriteLine("Please enter email");
                     string targetemail = Console.ReadLine();
 
-                    Person adminuser = UserRepository.GetUserByEmail(targetemail);
+                    Person adminuser = userRepository.GetUserByEmail(targetemail);
                     if (adminuser is Admin)
                     {
 
-                        UserRepository.Delete(adminuser);
+                        userRepository.Delete(adminuser);
                         Console.WriteLine("Admin succesfully deleted");
 
                     }
@@ -182,39 +173,42 @@ namespace Terminal_management_system.ApplicationLogic
             }
 
         }
-
-        public static void UserPanel(string email)
+        public static void UserPanel()
         {
-            Person user = UserRepository.GetUserByEmail(email);
-            Console.WriteLine($"User successfully authenticated : {user.GetInfo()}");
-            Console.WriteLine();
-
-            Console.WriteLine("commands : /logout \n /report ");
-            string command = Console.ReadLine();
-
-            if (command == "/report")
+            UserRepository userRepository = new UserRepository();
+            BlogRepository blogRepository = new BlogRepository();
+            while (true)
             {
-                string targetemail = Console.ReadLine();
-                Person reportUser = UserRepository.GetUserByEmail(targetemail);
-
-                if (reportUser != null)
+                Console.WriteLine($"/update-info  /report-user  /report  /write-blog  /my-blogs  /logout");
+                Console.Write("Enter command : ");
+                string command = Console.ReadLine();
+                if (command == "/update-info")
                 {
-                    Console.WriteLine("Please enter text");
-                    string text = Console.ReadLine();
-
-                    ReportRepository.Add(Person.Email, Person.Email, text);
+                    userRepository.UpdateInfo();
                 }
+                else if (command == "/logout")
+                {
+                    Authentication.IsAuthorized = false;
+                    break;
+                }
+                else if (command == "/write-blog")
+                {
+                    Console.Write("Please enter your blog : ");
+                    string content = Console.ReadLine();
 
-            }
-            else if (command == "/logout")
-            {
-                CurrentUser = null;
-                Program.Main(new string[] { });
-            }
+                    blogRepository.AddBlog(Authentication.Account, content);
+                    Console.WriteLine("blog addded");
+                }
+                else if (command == "/my-blogs")
+                {
+                    blogRepository.ShowBlogs();
+                }
+                else
+                {
+                    Console.WriteLine("Command not found");
+                }
+                Console.WriteLine();
 
-            else
-            {
-                Console.WriteLine("command not found");
             }
         }
     }

@@ -3,160 +3,166 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terminal_management_system.ApplicationLogic;
 using Terminal_management_system.ApplicationLogic.Validations;
 using Terminal_management_system.Database.Models;
 
 namespace Terminal_management_system.Database.Repository
 {
-    class UserRepository
+    class UserRepository : Common.Repository<Person, int> // full qualified namespace
     {
-        private static int _idcounter;
+        private static int _idCounter;
 
-        public static int IDCounter
+        public static int IdCounter
         {
             get
             {
-                _idcounter++;
-                return _idcounter;
+                _idCounter++;
+                return _idCounter;
             }
         }
-        public static List<Person> Persons { get; set; } = new List<Person>()
-            {
-            new Admin ("Super","admin","admin@gmail.com","123321"),
-            new Person ("Javid","Gafarli","cavid@gmail.com","123321")
-        };
-
-
-        public static void Add(string name, string lastName, string email, string password)
+        static UserRepository()
         {
-
-            Person user = new Person(name, lastName, email, password, IDCounter);
-            Persons.Add(user);
+            SeedUsers();
         }
-        public static Person Add(string name, string surname, string email, string password, int id)
+
+        private static void SeedUsers()
         {
-            Person user = new Person(name, surname, email, password, id);
-            Persons.Add(user);
+            DbContext.Add(new Admin("Mahmood", "Garibov", "qaribovmahmud@gmail.com", "123321"));
+            DbContext.Add(new Admin("Eshqin", "Mahmudov", "eshqin@gmail.com", "123321"));
+            DbContext.Add(new Person("Cavid", "Qafarli", "cavid@gmail.com", "123321"));
+            DbContext.Add(new Person("Hesen", "Esedov", "hesen@gmail.com", "123321"));
+        }
+
+        public Person AddUser(string firstName, string lastName, string email, string password)
+        {
+            Person user = new Person(firstName, lastName, email, password, IdCounter);
+            DbContext.Add(user);
             return user;
         }
 
-        public static Person Add(Person user)
+        public Person AddUser(string firstName, string lastName, string email, string password, int id)
         {
-            Persons.Add(user);
+            Person user = new Person(firstName, lastName, email, password, id);
+            DbContext.Add(user);
             return user;
         }
-        public static Person Add(Admin admin)
-        {
-            Persons.Add(admin);
-            return admin;
-        }
 
-
-        public static void Delete(Person user)
+        public static bool IsUserExistsByEmail(string email)
         {
-            Persons.Remove(user);
-        }
-        public static List<Person> GetAll()
-        {
-            return Persons;
-        }
-
-
-        public static Person GetUserByEmail(string email)
-        {
-            foreach (Person user in Persons)
+            foreach (Person user in DbContext)
             {
-                if (Person.Email == email)
+                if (user.Email == email)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static Person GetUserByEmailAndPassword(string email, string password)
+        {
+            foreach (Person user in DbContext)
+            {
+                if (user.Email == email && user.Password == password)
                 {
                     return user;
                 }
             }
+
             return null;
         }
 
-
-        public static bool RemoveUserByEmail(string email)
+        public static bool IsUserExistByEmailAndPassword(string email, string password)
         {
-            foreach (Person user in Persons)
+            foreach (Person user in DbContext)
             {
-                if (Person.Email == email)
+                if (user.Email == email && user.Password == password)
                 {
-                    Persons.Remove(user);
                     return true;
                 }
             }
-            return false;
+
+            return false; ;
         }
 
-
-        public static Person Update(Person user)
+        public Person GetUserByEmail(string email)
         {
-            Console.WriteLine("Please enter name");
-            string name = Console.ReadLine();
-            while (!UserValidations.IsNameValid(name))
+            foreach (Person user in DbContext)
             {
-                Console.WriteLine("Please enter name again");
-                name = Console.ReadLine();
+                if (user.Email == email)
+                {
+                    return user;
+                }
             }
-            Console.WriteLine("Please enter surname");
-            string surname = Console.ReadLine();
-            while (!UserValidations.IsSurnameValid(surname))
-            {
-                Console.WriteLine("Please enter surname");
-                surname = Console.ReadLine();
-            }
-            Person.Name = name;
-            Person.Lastname = surname;
-            return user;
-        }
 
+            return null;
+        }
+        public static Person GetUserById(int id)
+        {
+            foreach (Person user in DbContext)
+            {
+                if (user.Id == id)
+                {
+                    return user;
+                }
+            }
+
+            return null;
+        }
         public static void ShowAdmins()
         {
-            foreach (Person user in Persons)
+            foreach (Person user in DbContext)
             {
                 if (user is Admin)
                 {
-                    Console.WriteLine(user.GetInfo());
+                    Console.WriteLine($"Name: {user.FirstName}, Lastname: {user.LastName}, Email: {user.Email}  Date: {user.CreatedAt}");
                 }
             }
         }
-
-        public static bool IsEqualConfirmPassword(string password, string comfirmPassword)
+        public static void ShowUsers()
         {
-            if (comfirmPassword == password)
+            foreach (Person user in DbContext)
             {
-                return true;
-            }
-
-            Console.WriteLine("Passwords isn't same! ");
-
-            return false;
-        }
-        public static bool IsUserExistsByEmail(string email, string comfirmPassword)
-        {
-            foreach (Person user in Persons)
-            {
-
-                if (Person.Email == email && Person.Password == comfirmPassword)
+                if (user is not Admin)
                 {
-                    foreach (Person user1 in Persons)
-                    {
-                        if (user1.Id == user.Id)
-                        {
-                            return true;
-                        }
-                    }
-                    return false;
+                    Console.WriteLine($"Name: {user.FirstName}, Lastname: {user.LastName}, Email: {user.Email}  Date: {user.CreatedAt}");
                 }
             }
-            return false;
         }
-        public static void ShowAllUsers()
+        public void UpdateInfo(Person person)
         {
-            foreach (Person user in Persons)
+            if (Authentication.IsAuthorized)
             {
-                Console.WriteLine(user.GetInfo());
+                IsValidInfo(person);
             }
+        }
+        public void UpdateUserbyId(int id)
+        {
+            foreach (Person user in DbContext)
+            {
+                if (user.Id == id)
+                {
+                    IsValidInfo();
+                }
+            }
+
+        }
+        private static Person IsValidInfo(Person person)
+        {
+            Console.Write("Write new name: ");
+            string newFirstName = Console.ReadLine();
+            Console.Write("Write new lastname: ");
+            string newLastName = Console.ReadLine();
+
+            if (UserValidations.IsNameValid(newFirstName) &
+            UserValidations.IsSurnameValid(newLastName))
+            {
+                Authentication.Account.FirstName = person.FirstName;
+                Authentication.Account.LastName = person.LastName;
+            }
+            return person;
         }
     }
 }

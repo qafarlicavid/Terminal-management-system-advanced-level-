@@ -21,6 +21,7 @@ namespace Terminal_management_system.UI
             {
                 Console.WriteLine("/register");
                 Console.WriteLine("/login");
+                Console.WriteLine("/logout");
                 Console.WriteLine();
                 string command = Console.ReadLine();
                 Console.WriteLine();
@@ -32,6 +33,18 @@ namespace Terminal_management_system.UI
                 else if (command == "/login")
                 {
                     Authentication.Login();
+                }
+                else if (command == "/show-blogs-with-comments")
+                {
+
+                }
+                else if (command == "/show-filtered-blogs-with-comments")
+                {
+
+                }
+                else if (command == "/logout")
+                {
+                    break;
                 }
                 else
                 {

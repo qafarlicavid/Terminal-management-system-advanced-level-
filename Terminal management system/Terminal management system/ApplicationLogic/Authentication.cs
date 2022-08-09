@@ -6,68 +6,36 @@ using System.Threading.Tasks;
 using Terminal_management_system.ApplicationLogic.Validations;
 using Terminal_management_system.Database.Models;
 using Terminal_management_system.Database.Repository;
+using Terminal_management_system.Database.Repository.Common;
 
 namespace Terminal_management_system.ApplicationLogic
 {
     class Authentication
     {
+        public static Person Account { get; set; }
+        public static bool IsAuthorized { get; set; } = false;
+
         public static Person Register()
         {
+            UserRepository userRepository = new UserRepository();
+
             Console.WriteLine();
-            Console.WriteLine("write name :");
-            string name = Console.ReadLine();
+            string name = UserValidations.GetName();
+            string surname = UserValidations.GetSurname();
+            string email = UserValidations.GetEmail();
+            string password = UserValidations.GetPassword();
 
-            while (!UserValidations.IsNameValid(name))
-            {
-                Console.WriteLine("write name again");
-                name = Console.ReadLine();
-            }
-
-            Console.WriteLine("write surname :");
-            string surname = Console.ReadLine();
-
-            while (!UserValidations.IsSurnameValid(surname))
-            {
-                Console.WriteLine("write surname again");
-                surname = Console.ReadLine();
-            }
-
-            Console.WriteLine("write email :");
-            string email = Console.ReadLine();
-
-            while (!UserValidations.IsEmailValid(email) & UserValidations.isEmailUnical(email))
-            {
-                Console.WriteLine("write email again");
-                email = Console.ReadLine();
-            }
-
-            Console.WriteLine("write password :");
-            string password = Console.ReadLine();
-
-            Console.WriteLine("Confirm Password : ");
-            string confirmPassword = Console.ReadLine();
-
-
-            while (!(UserValidations.IsPasswordValid(password) && UserValidations.IsPaswordsMatch(password, confirmPassword)))
-            {
-                Console.WriteLine("write password again");
-                password = Console.ReadLine();
-
-                Console.WriteLine("write confirm password again");
-                confirmPassword = Console.ReadLine();
-            }
-
-            UserRepository.Add(name, surname, email, password);
+            userRepository.AddUser(name, surname, email, password);
             Console.WriteLine("You succesfully registered you can login now with your account");
 
-            Person user = UserRepository.GetUserByEmail(email);
+            Person user = userRepository.GetUserByEmail(email);
 
             return user;
-
         }
-
         public static void Login()
         {
+            UserRepository userRepository = new UserRepository();
+
             Console.WriteLine("Please enter email");
             string email = Console.ReadLine();
 
@@ -76,20 +44,22 @@ namespace Terminal_management_system.ApplicationLogic
 
             if (UserValidations.IsLogin(email, password))
             {
-                Person user = UserRepository.GetUserByEmail(email);
-
+                Person user = userRepository.GetUserByEmail(email);
 
                 if (user is Admin)
                 {
-                    Dashboard dashBoard = new Dashboard(user);
                     Dashboard.AdminPanel(email);
                 }
                 else
                 {
-                    Dashboard.UserPanel(email);
+                    Dashboard.UserPanel();
                 }
-
             }
+        }
+        public static void ShowBlogWithComments()
+        {
+            BlogRepository blogRepository = new BlogRepository();
+            blogRepository.ShowBlogs();
         }
     }
 }

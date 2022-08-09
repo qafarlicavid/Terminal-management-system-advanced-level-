@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Terminal_management_system.Database.Models;
 using Terminal_management_system.Database.Repository;
+using Terminal_management_system.Database.Repository.Common;
 
 namespace Terminal_management_system.ApplicationLogic.Validations
 {
@@ -44,31 +45,19 @@ namespace Terminal_management_system.ApplicationLogic.Validations
             return password == confirmPassword;
         }
 
-        public static bool isEmailUnical(string email)
-        {
-            foreach (Person person in UserRepository.Persons)
-            {
-                if (Person.Email == email)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
+        
         public static bool IsLogin(string email, string password)
         {
-            foreach (Person person in UserRepository.Persons)
+            foreach (Person person in UserRepository.DbContext)
             {
-                if (Person.Email == email && Person.Password == password)
+                if (person.Email == email && person.Password == password)
                 {
                     return true;
                 }
             }
             Console.WriteLine("ERROR! False info!");
             return false;
-
         }
-
         public static bool IsAdmin(Person person)
         {
             if (person is Admin)
@@ -78,6 +67,57 @@ namespace Terminal_management_system.ApplicationLogic.Validations
             }
             return false;
         }
+        public static string GetName()
+        {
+            Console.Write("write name : ");
+            string name = Console.ReadLine();
+            while (!UserValidations.IsNameValid(name))
+            {
+                Console.WriteLine("Please enter correct name : ");
+                name = Console.ReadLine();
+            }
+            return name;
+        }
+        public static string GetSurname()
+        {
+            Console.Write("write surname : ");
+            string surname = Console.ReadLine();
+            while (!UserValidations.IsSurnameValid(surname))
+            {
+                Console.WriteLine("Please enter correct surname : ");
+                surname = Console.ReadLine();
+            }
+            return surname;
+        }
 
+        public static string GetEmail()
+        {
+            Console.Write("write email : ");
+            string email = Console.ReadLine();
+            while (!UserValidations.IsEmailValid(email))
+            {
+                Console.WriteLine("Please enter correct email : ");
+                email = Console.ReadLine();
+            }
+            return email;
+        }
+        public static string GetPassword()
+        {
+            Console.WriteLine("write password : ");
+            string password = Console.ReadLine();
+
+            Console.WriteLine("Confirm Password : ");
+            string confirmPassword = Console.ReadLine();
+
+            while (!(UserValidations.IsPasswordValid(password) && UserValidations.IsPaswordsMatch(password, confirmPassword)))
+            {
+                Console.WriteLine("write password again : ");
+                password = Console.ReadLine();
+
+                Console.WriteLine("write confirm password again : ");
+                confirmPassword = Console.ReadLine();
+            }
+            return password;
+        }
     }
 }
