@@ -22,6 +22,18 @@ namespace Terminal_management_system.Database.Repository.Common
         {
             return DbContext;
         }
+        public List<TEntity> GetAll(Predicate<TEntity> predicate)
+        {
+            List<TEntity> list = new List<TEntity>();
+            foreach (TEntity entity in DbContext)
+            {
+                if (predicate(entity))
+                {
+                    list.Add(entity);
+                }
+            }
+            return list;
+        }
 
         public TEntity GetById(TId id)
         {
@@ -35,7 +47,18 @@ namespace Terminal_management_system.Database.Repository.Common
 
             return default(TEntity);
         }
-
+        public TEntity Get(Predicate<TEntity> expression)
+        {
+            foreach (TEntity entry in DbContext)
+            {
+                if (expression(entry))
+                {
+                    return entry;
+                }
+            }
+            return null;
+        }
+        
         public void Delete(TEntity entry)
         {
             DbContext.Remove(entry);

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Terminal_management_system.ApplicationLogic.Validations
 {
-    class BaseValidation
+    class BaseValidations
     {
         public static bool IsLengthCorrect(string text, int startLengt, int endLength)
         {

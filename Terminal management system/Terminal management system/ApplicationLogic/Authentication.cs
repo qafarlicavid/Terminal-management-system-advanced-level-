@@ -55,10 +55,6 @@ namespace Terminal_management_system.ApplicationLogic
                 }
             }
         }
-        public static void ShowBlogWithComments()
-        {
-            BlogRepository blogRepository = new BlogRepository();
-            blogRepository.ShowBlogs();
-        }
+        
     }
 }

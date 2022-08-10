@@ -42,6 +42,8 @@ namespace Terminal_management_system.Database.Repository
         }
         public Blog GetBlogbyId(int id)
         {
+            List<Blog> blogs = new List<Blog>();
+
             foreach (Blog blog in Blogs)
             {
                 if (blog.Id == id)

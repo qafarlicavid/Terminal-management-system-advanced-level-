@@ -1,5 +1,6 @@
 ﻿using System;
 using Terminal_management_system.ApplicationLogic;
+using Terminal_management_system.ApplicationLogic.Services;
 using Terminal_management_system.ApplicationLogic.Validations;
 using Terminal_management_system.Database.Models;
 using Terminal_management_system.Database.Repository;
@@ -23,6 +24,7 @@ namespace Terminal_management_system.UI
                 Console.WriteLine("/login");
                 Console.WriteLine("/show-blogs-with-comments");
                 Console.WriteLine("/show-filtered-blogs-with-comments");
+                Console.WriteLine("/find-blog-by-code");
                 Console.WriteLine("/logout");
                 Console.WriteLine();
                 string command = Console.ReadLine();
@@ -38,10 +40,15 @@ namespace Terminal_management_system.UI
                 }
                 else if (command == "/show-blogs-with-comments")
                 {
-                    Authentication.ShowBlogWithComments();
+                    BlogService.ShowBlogs();
                 }
                 else if (command == "/show-filtered-blogs-with-comments")
                 {
+                    BlogService.FilteredBlogs();
+                }
+                else if (command == "/find-blog-by-code")
+                {
+                    BlogService.FindBlogByCode();
 
                 }
                 else if (command == "/logout")
