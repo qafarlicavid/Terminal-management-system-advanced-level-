@@ -47,7 +47,17 @@ namespace Terminal_management_system.Database.Repository
             DbContext.Add(user);
             return user;
         }
-
+        public static bool IsEmailExists(string email)
+        {
+            foreach (Person user in DbContext)
+            {
+                if (user.Email == email)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         public static bool IsUserExistsByEmail(string email)
         {
             foreach (Person user in DbContext)
@@ -144,7 +154,7 @@ namespace Terminal_management_system.Database.Repository
             {
                 if (user.Id == id)
                 {
-                    IsValidInfo();
+                    IsValidInfo(user);
                 }
             }
 

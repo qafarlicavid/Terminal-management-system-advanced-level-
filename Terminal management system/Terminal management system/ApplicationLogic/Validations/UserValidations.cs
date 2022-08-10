@@ -67,56 +67,136 @@ namespace Terminal_management_system.ApplicationLogic.Validations
             }
             return false;
         }
+
+        public static bool IsUserExistsByEmail(string email)
+        {
+            if (!UserRepository.IsEmailExists(email))
+            {
+                return true;
+            }
+            Console.WriteLine("Email already exists");
+            return false;
+        }
+
         public static string GetName()
         {
-            Console.Write("write name : ");
-            string name = Console.ReadLine();
-            while (!UserValidations.IsNameValid(name))
+            bool isEceptionValid;
+            string name = null;
+            do
             {
-                Console.WriteLine("Please enter correct name : ");
-                name = Console.ReadLine();
-            }
+
+                try
+                {
+                    Console.Write("Insert Name : ");
+                    name = Console.ReadLine();
+                    if (name == "null")
+                    {
+                        throw new Exception();
+                    }
+                    isEceptionValid = false;
+                }
+                catch (Exception)
+                {
+
+                    isEceptionValid = true;
+                    Console.WriteLine("Seflik var");
+                }
+
+            } while (isEceptionValid || !UserValidations.IsNameValid(name));
+
+
             return name;
         }
-        public static string GetSurname()
+        public static string GetLastName()
         {
-            Console.Write("write surname : ");
-            string surname = Console.ReadLine();
-            while (!UserValidations.IsSurnameValid(surname))
+            bool isEceptionValid;
+            string surname = null;
+            do
             {
-                Console.WriteLine("Please enter correct surname : ");
-                surname = Console.ReadLine();
-            }
+
+                try
+                {
+                    Console.Write("Insert Surname : ");
+                    surname = Console.ReadLine();
+                    if (surname == "null")
+                    {
+                        throw new Exception();
+                    }
+                    isEceptionValid = false;
+                }
+                catch (Exception)
+                {
+
+                    isEceptionValid = true;
+                    Console.WriteLine("Seflik var");
+                }
+
+            } while (isEceptionValid || !UserValidations.IsNameValid(surname));
+
+
             return surname;
         }
 
         public static string GetEmail()
         {
-            Console.Write("write email : ");
+            Console.Write("Insert email : ");
             string email = Console.ReadLine();
-            while (!UserValidations.IsEmailValid(email))
+            while (!UserValidations.IsEmailValid(email) && !UserValidations.IsUserExistsByEmail(email))
             {
-                Console.WriteLine("Please enter correct email : ");
+                Console.Write("Pls enter email again : ");
                 email = Console.ReadLine();
             }
             return email;
         }
         public static string GetPassword()
         {
-            Console.WriteLine("write password : ");
-            string password = Console.ReadLine();
-
-            Console.WriteLine("Confirm Password : ");
-            string confirmPassword = Console.ReadLine();
-
-            while (!(UserValidations.IsPasswordValid(password) && UserValidations.IsPaswordsMatch(password, confirmPassword)))
+            string password = null;
+            bool isExceptionValid;
+            do
             {
-                Console.WriteLine("write password again : ");
-                password = Console.ReadLine();
+                try
+                {
 
-                Console.WriteLine("write confirm password again : ");
-                confirmPassword = Console.ReadLine();
-            }
+                    Console.Write("Insert password : ");
+                    password = Console.ReadLine();
+
+                    if (password == "null")
+                    {
+                        throw new Exception();
+                    }
+                    isExceptionValid = false;
+                }
+                catch (Exception)
+                {
+                    isExceptionValid = true;
+                    Console.WriteLine("Xeta var"); ;
+                }
+
+            } while (isExceptionValid || !UserValidations.IsPasswordValid(password));
+
+            string confirmPassword = null;
+            do
+            {
+                try
+                {
+
+                    Console.Write("Insert password again : ");
+                    confirmPassword = Console.ReadLine();
+                    if (confirmPassword == "null")
+                    {
+                        throw new Exception();
+                    }
+                    isExceptionValid = false;
+                }
+                catch
+                {
+                    isExceptionValid = true;
+                    Console.WriteLine("Conifrm pass null exception");
+                }
+
+            } while (isExceptionValid || !UserValidations.IsPaswordsMatch(password, confirmPassword));
+
+
             return password;
         }
     }

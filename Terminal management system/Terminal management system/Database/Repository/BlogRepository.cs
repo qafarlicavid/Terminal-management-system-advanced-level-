@@ -4,24 +4,40 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terminal_management_system.Database.Models;
+using Terminal_management_system.Database.Models.Enums;
+using Terminal_management_system.Database.Repository.Common;
 
-namespace Terminal_management_system.Database.Repository.Common
+namespace Terminal_management_system.Database.Repository
 {
-    public class BlogRepository
+    public class BlogRepository : Repository<Blog, int>
     {
+        static Random randomID = new Random();
+
+        private static string _code;
+
+
+        public static string RandomCode
+        {
+            get
+            {
+                _code = "BL" + randomID.Next(0, 99999);
+                return _code;
+            }
+
+        }
         public static List<Blog> Blogs { get; set; } = new List<Blog>();
 
-        public Blog AddBlog(Person owner, string content)
+        public static Blog AddBlog(Person from, string tittle, string text)
         {
-            Blog blog = new Blog(owner, content);
-            Blogs.Add(blog);
+            Blog blog = new Blog(from, tittle, text, BlogStatus.Pending);
+            DbContext.Add(blog);
             return blog;
         }
         public void ShowBlogs()
         {
-            foreach (Blog blog in Blogs)
+            foreach (Blog blog in DbContext)
             {
-                Console.WriteLine($"{blog.Id}. Owner: {blog.Owner.FirstName}, Content: {blog.Content}, Date: {blog.BlogDateTime}, Blog status: {blog.blogStatus}.");
+                Console.WriteLine($"{blog.Id}. Owner: {blog.From.FirstName}, Content: {blog.Content}, Date: {blog.CreadetTime}, Blog status: {blog.Status}.");
             }
         }
         public Blog GetBlogbyId(int id)

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Terminal_management_system.ApplicationLogic.Validations;
 using Terminal_management_system.Database.Models;
 using Terminal_management_system.Database.Repository;
-using Terminal_management_system.Database.Repository.Common;
 
 namespace Terminal_management_system.ApplicationLogic
 {
@@ -21,7 +20,7 @@ namespace Terminal_management_system.ApplicationLogic
 
             Console.WriteLine();
             string name = UserValidations.GetName();
-            string surname = UserValidations.GetSurname();
+            string surname = UserValidations.GetLastName();
             string email = UserValidations.GetEmail();
             string password = UserValidations.GetPassword();
 

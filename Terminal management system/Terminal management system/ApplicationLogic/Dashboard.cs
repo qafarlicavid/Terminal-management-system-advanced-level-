@@ -23,6 +23,7 @@ namespace Terminal_management_system.ApplicationLogic
 
         public static void AdminPanel(string email)
         {
+            Repository<Person, int> userRepo = new Repository<Person, int>();
             UserRepository userRepository = new UserRepository();
             Person user = userRepository.GetUserByEmail(email);
             Console.WriteLine("Admin succesfully joined", user.GetInfo());
@@ -47,11 +48,6 @@ namespace Terminal_management_system.ApplicationLogic
                 Console.WriteLine("/show-admins");
                 Console.WriteLine("/add-admin");
                 Console.WriteLine("/logout");
-
-                Console.WriteLine($"COMMANDS :  /update-info  /add-user  /show-users  /update-user  /remove-user" +
-                    $"   /add-admin  /show-admins  /remove-admin  " +
-                    $"   /reports   /all-reports" +
-                    $"   /status-blogs  /delete-blog  /delete-all-blogs  /logout");
 
 
                 Console.WriteLine("Please enter command");
@@ -101,8 +97,10 @@ namespace Terminal_management_system.ApplicationLogic
                         string lastname = Console.ReadLine();
                         string mail = Console.ReadLine();
                         string password = Console.ReadLine();
-                        Person newUser = userRepository.UpdateInfo(firstname, lastname, mail, password);
-                        Console.WriteLine($"{updateUser.FirstName} {updateUser.LastName} succesfully updated to {newUser.FirstName} {newUser.LastName}");
+                        Person person = new Person(firstname, lastname, mail, password);
+
+                        userRepository.UpdateInfo(person);
+                        Console.WriteLine($"{updateUser.FirstName} {updateUser.LastName} succesfully updated to {person.FirstName} {person.LastName}");
 
                     }
                     else
@@ -179,22 +177,37 @@ namespace Terminal_management_system.ApplicationLogic
             BlogRepository blogRepository = new BlogRepository();
             while (true)
             {
-                Console.WriteLine($"/update-info  /report-user  /report  /write-blog  /my-blogs  /logout");
+                Console.WriteLine();
+                Console.WriteLine($"/update-info  /write-blog  /my-blogs  /logout");
                 Console.Write("Enter command : ");
                 string command = Console.ReadLine();
                 if (command == "/update-info")
                 {
-                    userRepository.UpdateInfo();
-                }
-                else if (command == "/logout")
-                {
-                    Authentication.IsAuthorized = false;
-                    break;
+                    Console.WriteLine("Update name");
+                    string firstname = UserValidations.GetName();
+                    Console.WriteLine("Update lastname");
+                    string lastname = UserValidations.GetLastName();
+                    Console.WriteLine("Update mail");
+                    string mail = UserValidations.GetEmail();
+                    Console.WriteLine("Update password");
+                    string password = UserValidations.GetPassword();
+
+                    //Console.WriteLine("Update name");
+                    //string firstname = Console.ReadLine();
+                    //Console.WriteLine("Update lastname");
+                    //string lastname = Console.ReadLine();
+                    //Console.WriteLine("Update mail");
+                    //string mail = Console.ReadLine();
+                    //Console.WriteLine("Update password");
+                    //string password = Console.ReadLine();
+                    Person person = new Person(firstname, lastname, mail, password);
+                    userRepository.UpdateInfo(person);
                 }
                 else if (command == "/write-blog")
                 {
                     Console.Write("Please enter your blog : ");
                     string content = Console.ReadLine();
+                    
 
                     blogRepository.AddBlog(Authentication.Account, content);
                     Console.WriteLine("blog addded");
@@ -202,6 +215,11 @@ namespace Terminal_management_system.ApplicationLogic
                 else if (command == "/my-blogs")
                 {
                     blogRepository.ShowBlogs();
+                }
+                else if (command == "/logout")
+                {
+                    Authentication.IsAuthorized = false;
+                    break;
                 }
                 else
                 {

@@ -21,6 +21,8 @@ namespace Terminal_management_system.UI
             {
                 Console.WriteLine("/register");
                 Console.WriteLine("/login");
+                Console.WriteLine("/show-blogs-with-comments");
+                Console.WriteLine("/show-filtered-blogs-with-comments");
                 Console.WriteLine("/logout");
                 Console.WriteLine();
                 string command = Console.ReadLine();
@@ -36,7 +38,7 @@ namespace Terminal_management_system.UI
                 }
                 else if (command == "/show-blogs-with-comments")
                 {
-
+                    Authentication.ShowBlogWithComments();
                 }
                 else if (command == "/show-filtered-blogs-with-comments")
                 {

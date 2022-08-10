@@ -3,26 +3,58 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terminal_management_system.Database.Models.Common;
 using Terminal_management_system.Database.Models.Enums;
+using Terminal_management_system.Database.Repository;
 
 namespace Terminal_management_system.Database.Models
 {
-    public class Blog
+    public class Blog : Entity<int>
     {
-        public int Id { get; set; }
-        public static int IdCounter { get; set; } = 1;
-        public Person Owner { get; set; }
-        public string Content { get; set; }
-        public DateTime BlogDateTime { get; set; }
-        public BlogStatus blogStatus { get; set; }
+        //public static int IdCounter { get; set; } = 1;
+        //public Person Owner { get; set; }
+        //public string Content { get; set; }
+        //public DateTime BlogDateTime { get; set; }
+        //public BlogStatus blogStatus { get; set; }
 
-        public Blog(Person owner, string content)
+        //public Blog(Person owner, string content)
+        //{
+        //    Id = IdCounter++;
+        //    Owner = owner;
+        //    Content = content;
+        //    BlogDateTime = DateTime.Now;
+        //    blogStatus = BlogStatus.Pending;
+        //}
+        public Person From { get; set; }
+        public string Tittle { get; set; }
+        public string Content { get; set; }
+        public string ID { get; set; }
+        public DateTime CreadetTime { get; set; }
+        public BlogStatus Status { get; set; }
+
+
+        public Blog(Person from, string tittle, string content, BlogStatus status, string id = null)
         {
-            Id = IdCounter++;
-            Owner = owner;
+
+            From = from;
+            Tittle = tittle;
             Content = content;
-            BlogDateTime = DateTime.Now;
-            blogStatus = BlogStatus.Pending;
+            Status = status;
+
+            CreadetTime = DateTime.Now;
+            if (id != null)
+            {
+                ID = id;
+            }
+            else
+            {
+                ID = BlogRepository.RandomCode;
+            }
+
+        }
+        public string GetInfo()
+        {
+            return "Time : " + CreadetTime.ToString("dd.MM.yyyy") + " ID : " + ID + " Tittle : " + Tittle + " Content: " + Content + "- Status : " + Status;
         }
     }
 }
