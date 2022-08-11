@@ -9,22 +9,8 @@ using Terminal_management_system.Database.Repository;
 
 namespace Terminal_management_system.Database.Models
 {
-    public class Blog : Entity<int>
+    public class Blog : Entity<string>
     {
-        //public static int IdCounter { get; set; } = 1;
-        //public Person Owner { get; set; }
-        //public string Content { get; set; }
-        //public DateTime BlogDateTime { get; set; }
-        //public BlogStatus blogStatus { get; set; }
-
-        //public Blog(Person owner, string content)
-        //{
-        //    Id = IdCounter++;
-        //    Owner = owner;
-        //    Content = content;
-        //    BlogDateTime = DateTime.Now;
-        //    blogStatus = BlogStatus.Pending;
-        //}
         public Person From { get; set; }
         public string Tittle { get; set; }
         public string Content { get; set; }

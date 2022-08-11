@@ -99,7 +99,7 @@ namespace Terminal_management_system.ApplicationLogic.Validations
                 {
 
                     isEceptionValid = true;
-                    Console.WriteLine("Seflik var");
+                    Console.WriteLine("Sehvlik var");
                 }
 
             } while (isEceptionValid || !UserValidations.IsNameValid(name));
@@ -128,7 +128,7 @@ namespace Terminal_management_system.ApplicationLogic.Validations
                 {
 
                     isEceptionValid = true;
-                    Console.WriteLine("Seflik var");
+                    Console.WriteLine("Sehvlik var");
                 }
 
             } while (isEceptionValid || !UserValidations.IsNameValid(surname));
@@ -198,6 +198,28 @@ namespace Terminal_management_system.ApplicationLogic.Validations
 
 
             return password;
+        }
+        public static string GetTitle()
+        {
+            Console.Write("enter title : ");
+            string title = Console.ReadLine();
+            while (!(title.Length >=10 && title.Length <= 25))
+            {
+                Console.Write("Pls enter title again(min10,max25) : ");
+                title = Console.ReadLine();
+            }
+            return title;
+        }
+        public static string GetContent()
+        {
+            Console.Write("enter content : ");
+            string content = Console.ReadLine();
+            while (!(content.Length >= 20 && content.Length <= 35))
+            {
+                Console.Write("Pls enter content again(min20,max35) : ");
+                content = Console.ReadLine();
+            }
+            return content;
         }
     }
 }

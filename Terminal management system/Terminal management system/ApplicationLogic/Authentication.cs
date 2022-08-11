@@ -55,6 +55,5 @@ namespace Terminal_management_system.ApplicationLogic
                 }
             }
         }
-        
     }
 }

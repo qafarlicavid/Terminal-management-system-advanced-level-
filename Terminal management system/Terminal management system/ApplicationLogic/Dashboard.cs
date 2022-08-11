@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terminal_management_system.ApplicationLogic.Services;
 using Terminal_management_system.ApplicationLogic.Validations;
 using Terminal_management_system.Database.Models;
 using Terminal_management_system.Database.Repository;
@@ -43,10 +44,11 @@ namespace Terminal_management_system.ApplicationLogic
                 Console.WriteLine();
                 Console.WriteLine("Admin User's Commands :");
                 Console.WriteLine();
+                Console.WriteLine("/add-admin");
+                Console.WriteLine("/show-admins");
                 Console.WriteLine("/make-admin");
                 Console.WriteLine("/remove-admin");
-                Console.WriteLine("/show-admins");
-                Console.WriteLine("/add-admin");
+                Console.WriteLine("/show-auditing-blogs");
                 Console.WriteLine("/logout");
 
 
@@ -159,7 +161,10 @@ namespace Terminal_management_system.ApplicationLogic
                     }
 
                 }
-
+                else if (command == "/show-auditing-blogs")
+                {
+                    BlogService.BlogManagement();
+                }
                 else if (command == "/logout")
                 {
                     Program.Main(new string[] { });
@@ -169,16 +174,16 @@ namespace Terminal_management_system.ApplicationLogic
                     Console.WriteLine("Command Not Found");
                 }
             }
-
         }
         public static void UserPanel()
         {
             UserRepository userRepository = new UserRepository();
             BlogRepository blogRepository = new BlogRepository();
+            CommentRepository commentRepository = new CommentRepository();
             while (true)
             {
                 Console.WriteLine();
-                Console.WriteLine($"/update-info  /write-blog  /my-blogs  /logout");
+                Console.WriteLine($"/update-info  /add-blog  /my-blogs  /inbox  /add-comment  /delete-blog  /logout");
                 Console.Write("Enter command : ");
                 string command = Console.ReadLine();
                 if (command == "/update-info")
@@ -192,30 +197,34 @@ namespace Terminal_management_system.ApplicationLogic
                     Console.WriteLine("Update password");
                     string password = UserValidations.GetPassword();
 
-                    //Console.WriteLine("Update name");
-                    //string firstname = Console.ReadLine();
-                    //Console.WriteLine("Update lastname");
-                    //string lastname = Console.ReadLine();
-                    //Console.WriteLine("Update mail");
-                    //string mail = Console.ReadLine();
-                    //Console.WriteLine("Update password");
-                    //string password = Console.ReadLine();
                     Person person = new Person(firstname, lastname, mail, password);
                     userRepository.UpdateInfo(person);
                 }
-                else if (command == "/write-blog")
+                else if (command == "/add-blog")
                 {
                     Console.Write("Please enter your blog : ");
-                    string content = Console.ReadLine();
-                    
 
-                    blogRepository.AddBlog(Authentication.Account, content);
+                    Blog blog = new Blog(CurrentUser, UserValidations.GetTitle(), UserValidations.GetContent(), Database.Models.Enums.BlogStatus.Approved);
+                    BlogRepository.AddBlog(userRepository.GetUserByEmail("cavid@gmail.com"), "Salam", "Necesiz");
                     Console.WriteLine("blog addded");
                 }
                 else if (command == "/my-blogs")
                 {
-                    blogRepository.ShowBlogs();
+                    BlogService.ShowBlogs();
                 }
+                else if (command == "/inbox")
+                {
+                    BlogService.Inbox();
+                }
+                else if (command == "/add-comment")
+                {
+                    BlogService.AddComment();
+                }
+                else if (command == "/delete-blog")
+                {
+                    BlogService.DeleteBlog();
+                }
+
                 else if (command == "/logout")
                 {
                     Authentication.IsAuthorized = false;
@@ -226,7 +235,6 @@ namespace Terminal_management_system.ApplicationLogic
                     Console.WriteLine("Command not found");
                 }
                 Console.WriteLine();
-
             }
         }
     }

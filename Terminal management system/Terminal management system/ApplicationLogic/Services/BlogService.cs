@@ -10,22 +10,22 @@ using Terminal_management_system.Database.Repository;
 
 namespace Terminal_management_system.ApplicationLogic.Services
 {
-    partial class BlogService  //when program starts
+    partial class BlogService 
     {
-        private static BlogRepository blogrepo = new BlogRepository();
-        private static CommentRepository commentrepo = new CommentRepository();
-        private static InboxRepository inboxRepository = new InboxRepository();
+        private static BlogRepository blogRepo = new BlogRepository();
+        private static CommentRepository commentRepo = new CommentRepository();
+        private static InboxRepository inboxRepo = new InboxRepository();
 
-        public static void ShowBlogs()
+        public static void ShowBlogsWithComments()
         {
-            List<Blog> blogs = blogrepo.GetAll();
-            List<Comment> comments = commentrepo.GetAll();
+            List<Blog> blogs = blogRepo.GetAll();
+            List<Comment> comments = commentRepo.GetAll();
             foreach (Blog blog in blogs)
             {
                 if (blog.Status == BlogStatus.Approved)
                 {
                     Console.WriteLine($"[{blog.CreadetTime.ToString("dd.MM.yyyy")}] [{blog.ID}] [{blog.From.FirstName}]  [{blog.From.LastName}] ");
-                    Console.WriteLine($"==={blog.Tittle}===");
+                    Console.WriteLine($"---==={blog.Tittle}===---");
                     Console.WriteLine(blog.Content);
                     Console.WriteLine();
 
@@ -45,15 +45,15 @@ namespace Terminal_management_system.ApplicationLogic.Services
 
         public static void FilteredBlogs()
         {
-            List<Blog> blogs = blogrepo.GetAll();
-            List<Comment> comments = commentrepo.GetAll();
+            List<Blog> blogs = blogRepo.GetAll();
+            List<Comment> comments = commentRepo.GetAll();
             Console.WriteLine("/tittle");
             Console.WriteLine("/firstname");
             Console.WriteLine("enter command");
             string command = Console.ReadLine();
             if (command == "/tittle")
             {
-                Console.WriteLine("enter tittle :");
+                Console.WriteLine("Enter tittle : ");
                 string tittle = Console.ReadLine();
 
                 foreach (Blog blog in blogs)
@@ -63,7 +63,7 @@ namespace Terminal_management_system.ApplicationLogic.Services
                         if (blog.Status == BlogStatus.Approved)
                         {
                             Console.WriteLine($"[{blog.CreadetTime.ToString("dd.MM.yyyy")}] [{blog.ID}] [{blog.From.FirstName}]  [{blog.From.LastName}] ");
-                            Console.WriteLine($"==={blog.Tittle}===");
+                            Console.WriteLine($"---==={blog.Tittle}===---");
                             Console.WriteLine(blog.Content);
                             Console.WriteLine();
 
@@ -82,7 +82,7 @@ namespace Terminal_management_system.ApplicationLogic.Services
             }
             else if (command == "/firstname")
             {
-                Console.WriteLine("enter firstname");
+                Console.WriteLine("Enter firstname : ");
                 string firstname = Console.ReadLine();
                 foreach (Blog blog in blogs)
                 {
@@ -91,7 +91,7 @@ namespace Terminal_management_system.ApplicationLogic.Services
                         if (blog.Status == BlogStatus.Approved)
                         {
                             Console.WriteLine($"[{blog.CreadetTime.ToString("dd.MM.yyyy")}] [{blog.ID}] [{blog.From.FirstName}]  [{blog.From.LastName}] ");
-                            Console.WriteLine($"==={blog.Tittle}===");
+                            Console.WriteLine($"---==={blog.Tittle}===---");
                             Console.WriteLine(blog.Content);
                             Console.WriteLine();
 
@@ -112,15 +112,15 @@ namespace Terminal_management_system.ApplicationLogic.Services
 
         public static void FindBlogByCode()
         {
-            List<Comment> comments = commentrepo.GetAll();
-            Console.WriteLine("Please enter code");
+            List<Comment> comments = commentRepo.GetAll();
+            Console.Write("Please enter code : ");
             string code = Console.ReadLine();
+            Blog blog = blogRepo.GetBlogbyId(code);
 
-            Blog blog = BlogRepository.GetBlogbyId(code);
             if (blog != null)
             {
                 Console.WriteLine($"[{blog.CreadetTime.ToString("dd.MM.yyyy")}] [{blog.ID}] [{blog.From.FirstName}]  [{blog.From.LastName}] ");
-                Console.WriteLine($"==={blog.Tittle}===");
+                Console.WriteLine($"---==={blog.Tittle}===---");
                 Console.WriteLine(blog.Content);
                 Console.WriteLine();
 
@@ -137,16 +137,32 @@ namespace Terminal_management_system.ApplicationLogic.Services
 
     }
 
-    partial class BlogService  //user`s methods
+    partial class BlogService
     {
         public static void Inbox()
         {
+            List<Inbox> inboxes = inboxRepo.GetAll();
+            if (inboxes != null)
+            {
+                foreach (Inbox inbox in inboxes)
+                {
+                    if (inbox.To == Dashboard.CurrentUser)
+                    {
+                        Console.WriteLine(inbox.Message);
 
+                    }
+                }
+                Console.WriteLine();
+            }
+            else
+            {
+                Console.WriteLine("|---Empty---|");
+            }
         }
 
         public static void MyBlogs()
         {
-            List<Blog> blogs = blogrepo.GetAll();
+            List<Blog> blogs = blogRepo.GetAll();
             int rownumber = 1;
             foreach (Blog blog in blogs)
             {
@@ -168,7 +184,7 @@ namespace Terminal_management_system.ApplicationLogic.Services
                 tittle = Console.ReadLine();
             }
 
-            Console.WriteLine("enter blog content");
+            Console.WriteLine("Enter blog content : ");
             string content = Console.ReadLine();
             while (!BaseValidations.IsLengthCorrect(content, 20, 45))
             {
@@ -181,15 +197,15 @@ namespace Terminal_management_system.ApplicationLogic.Services
 
         public static void DeleteBlog()
         {
-            Console.WriteLine("enter blog code :");
+            Console.WriteLine("Enter blog code : ");
             string code = Console.ReadLine();
 
-            Blog blog = BlogRepository.GetById(code);
+            Blog blog = blogRepo.GetById(code);
 
             if (Dashboard.CurrentUser == blog.From)
             {
-                blogrepo.Delete(blog);
-                Console.WriteLine("your blog deleted succesfully.");
+                blogRepo.Delete(blog);
+                Console.WriteLine("Your blog deleted succesfully");
             }
             else
             {
@@ -201,10 +217,11 @@ namespace Terminal_management_system.ApplicationLogic.Services
         {
             Console.WriteLine("Please enter blog's code which you want to comment");
             string code = Console.ReadLine();
-            Blog blog = BlogRepository.GetById(code);
+
+            Blog blog = blogRepo.GetById(code);
             if (blog != null)
             {
-                Console.WriteLine("enter your comment");
+                Console.WriteLine("Enter your comment : ");
                 string comment = Console.ReadLine();
                 while (!BaseValidations.IsLengthCorrect(comment, 10, 35))
                 {
@@ -217,20 +234,37 @@ namespace Terminal_management_system.ApplicationLogic.Services
             }
             else
             {
-                Console.WriteLine("Blog not found");
+                Console.WriteLine("Blog not found!");
                 Console.WriteLine();
+            }
+        }
+        public static void ShowBlogs()
+        {
+            BlogRepository blogRepo = new BlogRepository();
+            List<Blog> blogs = blogRepo.GetAll();
+            
+            if (blogs != null)
+            {
+                foreach (Blog blog in blogs)
+                {
+                    Console.WriteLine($"{blog.ID}. Owner: {blog.From.FirstName}, Content: {blog.Content}, Date: {blog.CreadetTime}, Blog status: {blog.Status}.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("empty");
             }
         }
 
     }
 
 
-    partial class BlogService  //Admin`s methods
+    partial class BlogService
     {
         public static void BlogManagement()
         {
-            List<Blog> blogs = blogrepo.GetAll();
-            List<Comment> comments = commentrepo.GetAll();
+            List<Blog> blogs = blogRepo.GetAll();
+            List<Comment> comments = commentRepo.GetAll();
 
             foreach (Blog blog in blogs)
             {
@@ -238,7 +272,7 @@ namespace Terminal_management_system.ApplicationLogic.Services
                 {
                     Console.WriteLine($"[{blog.CreadetTime.ToString("dd.MM.yyyy")}] [{blog.ID}] [{blog.Status}] [{blog.From.FirstName}]" +
                         $"  [{blog.From.LastName}] ");
-                    Console.WriteLine($"==={blog.Tittle}===");
+                    Console.WriteLine($"---==={blog.Tittle}===---");
                     Console.WriteLine(blog.Content);
                     Console.WriteLine();
                 }
@@ -253,7 +287,7 @@ namespace Terminal_management_system.ApplicationLogic.Services
 
             Console.WriteLine("Enter blog's code :");
             string code = Console.ReadLine();
-            Blog auditingBlog = BlogRepository.GetByCode(code);
+            Blog auditingBlog = blogRepo.GetById(code);
             string message = null;
 
             if (auditingBlog != null)
@@ -264,7 +298,7 @@ namespace Terminal_management_system.ApplicationLogic.Services
                     message = "Blog Approved";
 
                     Inbox inbox = new Inbox(auditingBlog.From, auditingBlog, message);
-                    inboxRepository.Add(inbox);
+                    inboxRepo.Add(inbox);
 
                     Console.WriteLine("Blog Approved");
                 }
@@ -274,12 +308,12 @@ namespace Terminal_management_system.ApplicationLogic.Services
                     message = "Blog Rejected";
 
                     Inbox inbox = new Inbox(auditingBlog.From, auditingBlog, message);
-                    inboxRepository.Add(inbox);
+                    inboxRepo.Add(inbox);
                     Console.WriteLine("Blog Rejected");
                 }
                 else
                 {
-                    Console.WriteLine("command not found");
+                    Console.WriteLine("Command not found!");
                 }
                 Console.WriteLine();
             }

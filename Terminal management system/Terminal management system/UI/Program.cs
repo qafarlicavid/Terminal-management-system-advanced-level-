@@ -40,7 +40,7 @@ namespace Terminal_management_system.UI
                 }
                 else if (command == "/show-blogs-with-comments")
                 {
-                    BlogService.ShowBlogs();
+                    BlogService.ShowBlogsWithComments();
                 }
                 else if (command == "/show-filtered-blogs-with-comments")
                 {

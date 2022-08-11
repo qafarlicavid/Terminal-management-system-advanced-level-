@@ -17,7 +17,6 @@ namespace Terminal_management_system.Database.Models
             : base(firstName, lastname, email, password)
         {
 
-
         }
 
         public override string GetInfo()

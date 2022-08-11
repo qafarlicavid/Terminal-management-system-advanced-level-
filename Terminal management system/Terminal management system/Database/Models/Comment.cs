@@ -25,7 +25,6 @@ namespace Terminal_management_system.Database.Models
             CreatedTime = DateTime.Now;
             _rowNumber++;
         }
-
         public string GetInfo()
         {
             return RowNumber + " " + CreatedTime.ToString("mm.dd.yyyy") + " " + From.FirstName + " " + From.LastName + " " + Content;
