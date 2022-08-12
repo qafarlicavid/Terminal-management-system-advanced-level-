@@ -25,7 +25,7 @@ namespace Terminal_management_system.ApplicationLogic.Services
                 if (blog.Status == BlogStatus.Approved)
                 {
                     Console.WriteLine($"[{blog.CreadetTime.ToString("dd.MM.yyyy")}] [{blog.ID}] [{blog.From.FirstName}]  [{blog.From.LastName}] ");
-                    Console.WriteLine($"---==={blog.Tittle}===---");
+                    Console.WriteLine($"Tittle Name : {blog.Tittle}");
                     Console.WriteLine(blog.Content);
                     Console.WriteLine();
 
@@ -63,7 +63,7 @@ namespace Terminal_management_system.ApplicationLogic.Services
                         if (blog.Status == BlogStatus.Approved)
                         {
                             Console.WriteLine($"[{blog.CreadetTime.ToString("dd.MM.yyyy")}] [{blog.ID}] [{blog.From.FirstName}]  [{blog.From.LastName}] ");
-                            Console.WriteLine($"---==={blog.Tittle}===---");
+                            Console.WriteLine($"Tittle Name : {blog.Tittle}");
                             Console.WriteLine(blog.Content);
                             Console.WriteLine();
 
@@ -91,7 +91,7 @@ namespace Terminal_management_system.ApplicationLogic.Services
                         if (blog.Status == BlogStatus.Approved)
                         {
                             Console.WriteLine($"[{blog.CreadetTime.ToString("dd.MM.yyyy")}] [{blog.ID}] [{blog.From.FirstName}]  [{blog.From.LastName}] ");
-                            Console.WriteLine($"---==={blog.Tittle}===---");
+                            Console.WriteLine($"Tittle Name : {blog.Tittle}");
                             Console.WriteLine(blog.Content);
                             Console.WriteLine();
 
@@ -120,7 +120,7 @@ namespace Terminal_management_system.ApplicationLogic.Services
             if (blog != null)
             {
                 Console.WriteLine($"[{blog.CreadetTime.ToString("dd.MM.yyyy")}] [{blog.ID}] [{blog.From.FirstName}]  [{blog.From.LastName}] ");
-                Console.WriteLine($"---==={blog.Tittle}===---");
+                Console.WriteLine($"Tittle Name : {blog.Tittle}");
                 Console.WriteLine(blog.Content);
                 Console.WriteLine();
 

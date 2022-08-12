@@ -14,12 +14,17 @@ namespace Terminal_management_system.UI
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("----------------------------------------------------- Welcome --------------------------------------------------------- ");
-            Console.WriteLine("Current Commands:");
-            Console.WriteLine("----------------------------------------------------------------------------------------------------------------------- ");
-
+            Console.ForegroundColor = ConsoleColor.Green;
+            Typewriter.Typewrite("Welcome Mahmood Teacher! \n" + 
+                "Please click enter button to start program \n" +
+                "Hope you give a high score Sir :)");
+            Console.ReadKey();
+            Console.WriteLine();
+            Console.WriteLine();
             while (true)
             {
+                Console.WriteLine("Current Commands : ");
+                Console.WriteLine();
                 Console.WriteLine("/register");
                 Console.WriteLine("/login");
                 Console.WriteLine("/show-blogs-with-comments");

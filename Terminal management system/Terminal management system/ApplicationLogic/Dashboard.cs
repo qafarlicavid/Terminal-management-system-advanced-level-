@@ -183,7 +183,7 @@ namespace Terminal_management_system.ApplicationLogic
             while (true)
             {
                 Console.WriteLine();
-                Console.WriteLine($"/update-info  /add-blog  /my-blogs  /inbox  /add-comment  /delete-blog  /logout");
+                Console.WriteLine($"/update-info  /add-blog  /show-blogs  /inbox  /add-comment  /delete-blog  /logout");
                 Console.Write("Enter command : ");
                 string command = Console.ReadLine();
                 if (command == "/update-info")
@@ -208,7 +208,7 @@ namespace Terminal_management_system.ApplicationLogic
                     BlogRepository.AddBlog(userRepository.GetUserByEmail("cavid@gmail.com"), "Salam", "Necesiz");
                     Console.WriteLine("blog addded");
                 }
-                else if (command == "/my-blogs")
+                else if (command == "/show-blogs")
                 {
                     BlogService.ShowBlogs();
                 }
