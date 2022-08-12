@@ -14,10 +14,11 @@ namespace Terminal_management_system.UI
     {
         public static void Main(string[] args)
         {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Typewriter.Typewrite("Welcome Mahmood Teacher! \n" + 
-                "Please click enter button to start program \n" +
-                "Hope you give a high score Sir :)");
+            Console.ForegroundColor = ConsoleColor.Green
+                ;
+            Typewriter.Typewrite("Welcome Mahmood Teacher! \n" +
+                "Hope you give a high score Sir :) \n" +
+                "Please click enter button to start program :");
             Console.ReadKey();
             Console.WriteLine();
             Console.WriteLine();
